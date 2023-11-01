@@ -1,0 +1,64 @@
+---
+title: "Data Collection"
+output: html_document
+date: "2023-11-01"
+---
+
+Below is the code to filter the Trips_by_Distance csv to only contain data from Nashville, Tennesse.
+```{r}
+library(tidyverse)
+#read in data set
+trips<-read_csv("Trips_by_Distance.csv")
+
+#filter to only have data from Tennessee
+TN<-subset(trips, trips$`State FIPS`=="47")
+
+#filter to only have data from Davidson County (where Nashville is)
+davidson_county<-subset(TN,TN$`County Name`=="Davidson County")
+
+#export to csv
+write_csv(davidson_county,"Trips_by_davidsoncounty.csv")
+```
+
+Below is filtered/reading in the business.json file to contain information on bars/nightlife categories of businesses in Nashville.
+```{r}
+library(jsonlite)
+json_file_path_within_zip <- "yelp_Fall2023/business.json"
+
+# Read the JSON data from the zip archive
+business <- jsonlite::stream_in(unz("yelp_Fall2023.zip", json_file_path_within_zip))
+nashville<-subset(business, city=="Nashville")
+
+#only pick the data rows that contain "Bars" or "Nightlife" in categories listed
+nashville_bars<-nashville[grepl("Bars|Nightlife", nashville$categories),]
+
+
+#export filtered data to json file
+write_json(nashville_bars,"nashville_bars_nightlife.json")
+```
+
+
+```{r}
+json_file_path_within_zip <- "yelp_Fall2023/review.json"
+
+# Initialize an empty dataframe to store combined filtered results
+combined_filtered_data <- data.frame()
+
+#filter function to only get reviews from Nashville bars/nightlife businesses
+filter_function <- function(data) {
+  max_records <- Inf 
+
+  if (nrow(combined_filtered_data) < max_records) {
+    # Filter the data based on whether "business_id" is in nashville_bars
+    filtered_data <- data[data$business_id %in% nashville_bars$business_id, ]
+    combined_filtered_data <<- rbind(combined_filtered_data, filtered_data)
+  }
+
+  return(data)  # Return the original data to keep reading more records
+}
+
+json_stream <- jsonlite::stream_in(unz("yelp_Fall2023.zip", json_file_path_within_zip), handler = filter_function)
+
+#export filtered data to json file
+write_json(combined_filtered_data, "filtered_reviews.json")
+```
