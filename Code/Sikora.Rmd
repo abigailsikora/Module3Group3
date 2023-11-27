@@ -1,5 +1,5 @@
 ---
-title: "Data Collection"
+title: "Data Merging, Visuals, and Analysis - Abigail Sikora"
 output: html_document
 date: "2023-11-01"
 ---
@@ -61,4 +61,83 @@ json_stream <- jsonlite::stream_in(unz("yelp_Fall2023.zip", json_file_path_withi
 
 #export filtered data to json file
 write_json(combined_filtered_data, "filtered_reviews.json")
+```
+ggplot(review_data, aes(x=stars))+
+  geom_bar(fill="dodgerblue")+
+  labs(
+    x="Stars",
+    y="Number of Reviews",
+    title="Number of Reviews by Stars"
+  )+
+  theme_minimal()+
+  theme(
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=14),
+    plot.title=element_text(size=16, hjust=0.5)
+  )
+```
+Next is the code used for some of the visuals in the first presentation. This includes the visuals shown on slides 3-4.
+```{r}
+dancedf <- reviews[grepl("dance|dancing", reviews$text, ignore.case = TRUE), ]
+ggplot(dancedf, aes(x=stars))+
+  geom_bar(fill="dodgerblue")+
+  labs(
+    x="Stars",
+    y="Number of Reviews",
+    title="Dancing"
+  )+
+  theme_minimal()+
+  theme(
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=14),
+    plot.title=element_text(size=16, hjust=0.5)
+  )
+```
+```{r}
+cocktailsdf <- reviews[grepl("cocktails", reviews$text, ignore.case = TRUE), ]
+ggplot(cocktailsdf, aes(x=stars))+
+  geom_bar(fill="dodgerblue")+
+  labs(
+    x="Stars",
+    y="Number of Reviews",
+    title="Cocktails"
+  )+
+  theme_minimal()+
+  theme(
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=14),
+    plot.title=element_text(size=16, hjust=0.5)
+  )
+```
+```{r}
+musicdf <- reviews[grepl("music", reviews$text, ignore.case = TRUE), ]
+ggplot(musicdf, aes(x=stars))+
+  geom_bar(fill="dodgerblue")+
+  labs(
+    x="Stars",
+    y="Number of Reviews",
+    title="Music"
+  )+
+  theme_minimal()+
+  theme(
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=14),
+    plot.title=element_text(size=16, hjust=0.5)
+  )
+```
+```{r}
+peopledf <- reviews[grepl("people", reviews$text, ignore.case = TRUE), ]
+ggplot(peopledf, aes(x=stars))+
+  geom_bar(fill="dodgerblue")+
+  labs(
+    x="Stars",
+    y="Number of Reviews",
+    title="People"
+  )+
+  theme_minimal()+
+  theme(
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=14),
+    plot.title=element_text(size=16, hjust=0.5)
+  )
 ```
