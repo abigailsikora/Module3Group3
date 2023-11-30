@@ -20,13 +20,19 @@ ui <- fluidPage(
   # Tabs
   tabsetPanel(
     tabPanel("All Businesses",
-             leafletOutput("map"),
-             verbatimTextOutput("averageInfo"),
-             sliderInput("starFilter", "Filter by Star Rating",
-                         min = 1, max = 5, value = c(1, 5), step = 0.5),
-             sliderInput("reviewFilter", "Filter by Number of Reviews",
-                         min = 0, max = max(business$review_count, na.rm = TRUE), value = c(0, max(business$review_count, na.rm = TRUE))),
-  ),
+             fluidRow(
+               column(3,
+                      sliderInput("starFilter", "Filter by Star Rating",
+                                  min = 1, max = 5, value = c(1, 5), step = 0.1),
+                      sliderInput("reviewFilter", "Filter by Number of Reviews",
+                                  min = 0, max = max(business$review_count, na.rm = TRUE), value = c(0, max(business$review_count, na.rm = TRUE)))
+               ),
+               column(9,
+                      leafletOutput("map"),
+                      verbatimTextOutput("averageInfo")
+               )
+             )
+    ),
     tabPanel("Selected Business Overview", 
              selectInput("business", "Select a business", choices = business$name)),
     tabPanel("Advice", 
