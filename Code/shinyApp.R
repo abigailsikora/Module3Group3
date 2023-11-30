@@ -1,6 +1,8 @@
-
 library(jsonlite)
-
+library(shiny)
+library(leaflet)
+library(ggplot2)
+library(dplyr)
 # Read the JSON files
 business_data <- fromJSON('nashville_bars_nightlife.json')
 
@@ -9,30 +11,44 @@ business_data <- fromJSON('nashville_bars_nightlife.json')
 business <- as.data.frame(business_data)
 
 
-library(shiny)
-library(leaflet)
-
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   titlePanel("Bars and Nightlife in Nashville, TN"),
+  HTML("<h6>The data for the project focuses on businesses in Yelp that had a category label that contained either bar or nightlife.<h6>
+       <h7>If you have questions please email: amsikora2@wisc.edu, swang2297@wisc.edu, or vborwankar@wisc.edu<h7>"),
   
   # Tabs
   tabsetPanel(
     tabPanel("All Businesses",
-             leafletOutput("map")),
+             leafletOutput("map"),
+             verbatimTextOutput("averageInfo"),
+             sliderInput("starFilter", "Filter by Star Rating",
+                         min = 1, max = 5, value = c(1, 5), step = 0.5),
+             sliderInput("reviewFilter", "Filter by Number of Reviews",
+                         min = 0, max = max(business$review_count, na.rm = TRUE), value = c(0, max(business$review_count, na.rm = TRUE))),
+  ),
     tabPanel("Selected Business Overview", 
-             selectInput("postalCode", "Select Postal Code", choices = unique(business$postal_code))),
+             selectInput("business", "Select a business", choices = business$name)),
     tabPanel("Advice", 
-             plotOutput("histogram")),
+             HTML("<div class='advice-container'>
+                    <h4>Advice to consider:</h4>
+                    <p>1. Happy hours do not impact star rating by much. The average star difference between those that do have a happy hour and those that don't is less than 0.3. Therefore it is not important in considering having a happy hour or not.</p>
+                  </div>"),
+             plotOutput("happyhour"))
   )
-
 )
+
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   # Render leaflet map
   output$map <- renderLeaflet({
-    leaflet(business) %>% 
+    filtered_business <- filter(business, 
+                                stars >= input$starFilter[1] & stars <= input$starFilter[2] &
+                                  review_count >= input$reviewFilter[1] & review_count <= input$reviewFilter[2])
+    
+    leaflet(filtered_business) %>% 
       addProviderTiles("OpenStreetMap.Mapnik") %>% 
       addCircleMarkers(
         lat = ~latitude,
@@ -56,12 +72,26 @@ server <- function(input, output) {
         position = "bottomleft"
       )
   })
-  
-  
-  
-  
-  
+  output$happyhour <- renderPlot({
+    filtered<-subset(business, !is.na(attributes$HappyHour))
+    ggplot(filtered, aes(x = attributes$HappyHour, y = stars)) +
+      geom_bar(stat = "summary", fun = "mean", position = "dodge", fill = "skyblue") +
+      labs(title = "Impact of Happy Hour on Star Rating",
+           x = "Happy Hour",
+           y = "Average Star Rating")
+  })
+  output$averageInfo <- renderPrint({
+    avg_stars <- mean(business$stars, na.rm = TRUE)
+    avg_reviews <- mean(business$review_count, na.rm = TRUE)
+    cat("Average Star Rating: ", avg_stars, "\n")
+    cat("Average Number of Reviews: ", avg_reviews, "\n")
+  })
+
 }
+  
+  
+  
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)
