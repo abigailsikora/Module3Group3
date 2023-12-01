@@ -49,6 +49,8 @@ You can access the Shiny App developed based on our analysis directly via the fo
 **Note**: Ensure you have all the necessary R packages installed and loaded to run the code files and Shiny app locally.
 
 ## Contributors
--Vaisnavi Borwankar
--Abigail Sikora
+-Vaisnavi Borwankar  
+
+-Abigail Sikora  
+
 -Shuangyu Wang
