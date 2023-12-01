@@ -1,5 +1,5 @@
 # STAT 628- Module3 - Group3
-This repository contains the work of Group 3 for Module 3 in STAT628, focusing on analyzing Yelp business data.
+This repository contains the work of Group 3 for Module 3 in STAT628, focusing on analyzing Yelp business data. This project specifically focuses on analyzing businesses in Nashville, TN that contained either "bar" or "nighlife" in their category list on Yelp.
 
 ## Directory Structure
 ```
@@ -33,8 +33,7 @@ Module3Group3/
 
 -`data/`: Stores the datasets used in this project.
 
-BodyFat.csv: The original dataset used for building the prediction model.
-cleaned_data.csv: The cleaned data obtained after preprocessing.
+
 -`presentation documents/`: Stores the document files used to explain this project.
 
 
