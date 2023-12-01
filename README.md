@@ -1,4 +1,4 @@
-# STAT 628- Module3 - Group3
+# STAT 628 - Module3 - Group3
 This repository contains the work of Group 3 for Module 3 in STAT628, focusing on analyzing Yelp business data. This project specifically focuses on analyzing businesses in Nashville, TN that contained either "bar" or "nighlife" in their category list on Yelp.
 
 ## Directory Structure
@@ -6,15 +6,15 @@ This repository contains the work of Group 3 for Module 3 in STAT628, focusing o
 Module3Group3/
 │
 ├── code/ 
-│   ├── 
-│   └── 
+│   ├── Sikora.Rmd #contains code for filtering data sets, creating visuals, and analysis
+│   └── shinyApp.R #code for the shiny app
 │
 ├── data/ 
-│   ├── 
-│   └── 
-│
+│   ├── Trips_by_davidsoncounty.csv #data set from US Department of Transportation
+│   └── nashville_bars_nightlife.json #business dat from Yelp
+|
 ├── presentation documents/ 
-│   ├── 
+│   ├── Group3 Presentation1.pdf #exploratory analysis presentation slides
 │   └── 
 │
 ├── image/  # Various images and plots used in the analysis and presentation
@@ -23,7 +23,7 @@ Module3Group3/
 │   ├──
 │   ├── 
 │   ├── 
-│   └── 
+│   └──
 │
 └── README.md  # This file
 ```
