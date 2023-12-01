@@ -11,7 +11,7 @@ Module3Group3/
 │
 ├── data/ 
 │   ├── Trips_by_davidsoncounty.csv #data set from US Department of Transportation
-│   └── nashville_bars_nightlife.json #business dat from Yelp
+│   └── nashville_bars_nightlife.json #business data from Yelp
 |
 ├── presentation documents/ 
 │   ├── Group3 Presentation1.pdf #exploratory analysis presentation slides
@@ -49,6 +49,6 @@ You can access the Shiny App developed based on our analysis directly via the fo
 **Note**: Ensure you have all the necessary R packages installed and loaded to run the code files and Shiny app locally.
 
 ## Contributors
-Vaisnavi Borwankar
-Abigail Sikora
-Shuangyu Wang
+-Vaisnavi Borwankar
+-Abigail Sikora
+-Shuangyu Wang
