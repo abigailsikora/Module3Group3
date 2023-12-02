@@ -3,18 +3,29 @@ library(shiny)
 library(leaflet)
 library(ggplot2)
 library(dplyr)
-library(topicmodels)
 library(tidytext)
 # Read the JSON files
 business_data <- fromJSON('nashville_bars_nightlife.json')
-reviews <- fromJSON("filtered_reviews.json")
+census <- read.csv("census_postalcodes.csv")
+census <- census %>%
+  rename(
+    `Postal Code` =postal_code,
+    `Population` = population,
+    `Median Household Income` = income_median_household,
+    `Education` = eudcation,
+    `Employment` = employment,
+    `Households` = households,
+    `Businesses` = business
+  )
 
-# Convert reviews to a data frame
-reviews_df <- as.data.frame(reviews)
 
 
 # Create a data frame from the first JSON file
 business <- as.data.frame(business_data)
+reviews <- fromJSON("filtered_reviews.json")
+
+# Convert reviews to a data frame
+reviews_df <- as.data.frame(reviews)
 unique_postal_codes <- unique(business$postal_code)
 unique_business_names <- unique(business$name)
 unique_business_ids <- unique(business$business_id)
@@ -60,7 +71,8 @@ ui <- fluidPage(
     tabPanel("Choose a Business", 
              selectInput("postalCode", "Select Postal Code", choices = unique_postal_codes),
              selectInput("business", "Select a Business", choices = unique_business_names),
-             plotOutput("wordFrequencyPlot")
+             tableOutput("censusPlot"),
+             plotOutput("bus")
     ),
     tabPanel("Advice", 
              HTML("<div class='advice-container'>
@@ -123,19 +135,29 @@ server <- function(input, output, session) {
     cat("Average Star Rating: ", avg_stars, "\n")
     cat("Average Number of Reviews: ", avg_reviews, "\n")
   })
-  getReviews <- function(selectedBusiness) {
-    filtered_reviews <- reviews$text[reviews$business_id == selectedBusiness]
-    return(filtered_reviews)
-  }
-  
 
+  output$censusPlot <-renderTable({
+    census_filtered <- census %>%
+      filter(`Postal Code` == input$postalCode)
+})
+  output$bus <- renderPlot({
+    business_filtered <- business %>%
+      filter(name == input$business)
+    reviews_filtered <- reviews %>%
+      filter(business_id == business_filtered$business_id) %>%
+      mutate(date =as.Date(date),
+             year = lubridate::year(date))
+    ggplot(reviews_filtered, aes(x = date, y = stars)) +
+      geom_point() +
+      labs(title = paste("Number of Reviews Over Time for", input$business),
+           x = "Date",
+           y = "Star Rating") +
+      theme_minimal()
+})
+
+
+  
 }
-
-
-  
-  
-  
-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
