@@ -3,20 +3,44 @@ library(shiny)
 library(leaflet)
 library(ggplot2)
 library(dplyr)
+library(topicmodels)
+library(tidytext)
 # Read the JSON files
 business_data <- fromJSON('nashville_bars_nightlife.json')
+reviews <- fromJSON("filtered_reviews.json")
+
+# Convert reviews to a data frame
+reviews_df <- as.data.frame(reviews)
 
 
 # Create a data frame from the first JSON file
 business <- as.data.frame(business_data)
+unique_postal_codes <- unique(business$postal_code)
+unique_business_names <- unique(business$name)
+unique_business_ids <- unique(business$business_id)
 
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  titlePanel("Bars and Nightlife in Nashville, TN"),
-  HTML("<h6>The data for the project focuses on businesses in Yelp that had a category label that contained either bar or nightlife.<h6>
-       <h7>If you have questions please email: amsikora2@wisc.edu, swang2297@wisc.edu, or vborwankar@wisc.edu<h7>"),
-  
+  titlePanel(
+    div(
+      style = "text-align: center; color: #333; font-size: 24px; font-weight: bold;",
+      "Bars and Nightlife in Nashville, TN"
+    )
+  ),
+  HTML('
+  <div style="text-align: center; margin-top: 10px;">
+    <p style="font-size: 14px; color: #666; margin-bottom: 5px;">
+      The data for the project focuses on businesses in Yelp that had a category label containing either "bar" or "nightlife."
+    </p>
+    <p style="font-size: 12px; color: #888;">
+      If you have questions, please email:
+      <a href="mailto:amsikora2@wisc.edu" style="color: #007BFF;">amsikora2@wisc.edu</a>,
+      <a href="mailto:swang2297@wisc.edu" style="color: #007BFF;">swang2297@wisc.edu</a>, or
+      <a href="mailto:vborwankar@wisc.edu" style="color: #007BFF;">vborwankar@wisc.edu</a>
+    </p>
+  </div>
+'),
   # Tabs
   tabsetPanel(
     tabPanel("All Businesses",
@@ -33,8 +57,11 @@ ui <- fluidPage(
                )
              )
     ),
-    tabPanel("Selected Business Overview", 
-             selectInput("business", "Select a business", choices = business$name)),
+    tabPanel("Choose a Business", 
+             selectInput("postalCode", "Select Postal Code", choices = unique_postal_codes),
+             selectInput("business", "Select a Business", choices = unique_business_names),
+             plotOutput("wordFrequencyPlot")
+    ),
     tabPanel("Advice", 
              HTML("<div class='advice-container'>
                     <h4>Advice to consider:</h4>
@@ -47,7 +74,11 @@ ui <- fluidPage(
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
+  observeEvent(input$postalCode, {
+    # Update business dropdown based on selected postal code
+    updateSelectInput(session, "business", choices = unique(business$name[business$postal_code == input$postalCode]))
+  })
   # Render leaflet map
   output$map <- renderLeaflet({
     filtered_business <- filter(business, 
@@ -71,7 +102,7 @@ server <- function(input, output) {
         colors = viridisLite::viridis(9, direction = -1),
         labels = c("1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"),
         opacity = 1,
-        title = "Average Star Rating"
+        title = "Star Rating"
       )%>%
       addControl(
         html = '<div id="size-label"><strong>Circle Size:</strong> Number of Reviews</div>',
@@ -92,8 +123,15 @@ server <- function(input, output) {
     cat("Average Star Rating: ", avg_stars, "\n")
     cat("Average Number of Reviews: ", avg_reviews, "\n")
   })
+  getReviews <- function(selectedBusiness) {
+    filtered_reviews <- reviews$text[reviews$business_id == selectedBusiness]
+    return(filtered_reviews)
+  }
+  
 
 }
+
+
   
   
   
