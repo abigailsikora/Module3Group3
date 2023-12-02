@@ -43,7 +43,7 @@ Module3Group3/
 -`README.md:` Provides an overview and explains the repository structure (this file).
 
 ## Shiny App
-You can access the Shiny App developed based on our analysis directly via the following link: 
+You can access the Shiny App developed based on our analysis directly via the following link: https://amsikora2.shinyapps.io/stat628/  
 
 --- 
 
