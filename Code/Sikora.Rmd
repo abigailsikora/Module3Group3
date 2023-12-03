@@ -141,3 +141,43 @@ ggplot(peopledf, aes(x=stars))+
     plot.title=element_text(size=16, hjust=0.5)
   )
 ```
+Next is the code used for further analysis as seen in presentation 2. This includes the two sample t-tests.
+```{r}
+#data clean up and changing data types
+business_normalized <-business %>%
+  mutate(normalized_stars = weighted.mean(stars, w=review_count,na.rm=TRUE))
+head(business)
+head(business$attributes)
+business$postal_code<-as.factor(business$postal_code)
+business$attributes$HappyHour<-as.factor(business$attributes$HappyHour)
+business$attributes$OutdoorSeating<-as.factor(business$attributes$OutdoorSeating)
+business$attributes$NoiseLevel<-as.factor(business$attributes$NoiseLevel)
+business$attributes$Smoking<-as.factor(business$attributes$Smoking)
+summary(business$attributes)
+business$stars<-as.numeric(business$stars)
+
+
+#two sample t-test: analysis on happy hour
+t1 <- t.test(normalized_stars ~ attributes$HappyHour, data=business, var.equal=FALSE)
+t1
+
+#anova test on location
+t2 <- aov(normalized_stars ~ postal_code, data=business)
+summary(t2)
+tukey_result<-as.data.frame(TukeyHSD(t2))
+
+significant_pairs <- subset(tukey_result, abs(diff) > 1)
+
+# Print the filtered results
+print(significant_pairs)
+
+
+
+
+tukey_result <- TukeyHSD(t2)
+
+# Print the Tukey HSD results
+print(tukey_result)
+model <- lm(business$stars ~ business$attributes$HappyHour + business$postal_code)
+summary(model)
+```
