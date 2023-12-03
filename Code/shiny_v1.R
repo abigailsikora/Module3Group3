@@ -6,6 +6,7 @@ library(dplyr)
 library(tm)
 library(tidytext)
 library(tidyr)
+library(reshape2)
 
 # Read the JSON files
 business_data <- fromJSON('nashville_bars_nightlife.json')
@@ -16,9 +17,16 @@ reviews_df <- as.data.frame(reviews)
 
 # Create a data frame from the first JSON file
 business <- as.data.frame(business_data)
+
+sentiment_scores_by_postal_code <- read.csv("sentiment_by_postal_code.csv")
+#print(head(sentiment_scores_by_postal_code))
+sentiment_scores_business_id <- read.csv("sentiment_scores_by_business.csv")
+#print(head(sentiment_scores_business_id))
+
 unique_postal_codes <- unique(business$postal_code)
 unique_business_names <- unique(business$name)
 unique_business_ids <- unique(business$business_id)
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -46,7 +54,8 @@ ui <- fluidPage(
              selectInput("postalCode", "Select Postal Code", choices = unique_postal_codes),
              selectInput("business", "Select a Business", choices = unique_business_names),
              mainPanel(
-               tableOutput("sentimentScores")
+               tableOutput("sentimentScores"),
+               plotOutput("sentimentBarPlot")
              )
              ),
     tabPanel("Advice", 
@@ -81,7 +90,7 @@ server <- function(input, output, session) {
         lng = ~longitude,
         radius = ~sqrt(review_count) / 2,  # Adjust the scaling factor as needed
         fillOpacity = 0.7,
-        color = ~colorNumeric(palette = viridisLite::viridis(9, direction = -1), domain = c(1, 5))(stars),
+        color = ~colorNumeric(palette = viridisLite::viridis(9, direction = 1), domain = c(1, 5))(stars),
         popup = ~paste("Business: ", name, "<br>",
                        "Star Rating: ", stars, "<br>",
                        "Number of Reviews: ", review_count)
@@ -113,66 +122,52 @@ server <- function(input, output, session) {
     cat("Average Number of Reviews: ", avg_reviews, "\n")
   })
   
+  
 
-# Seniment Analysis Code:
 
-  sentiment_analysis <- reactive({
-    # Filter reviews based on the selected business name
-    selected_business_reviews <- reviews_df %>%
-      filter(business_id == unique_business_ids[business$name == input$business])
-    
-    # Preprocess text
-    corpus <- Corpus(VectorSource(selected_business_reviews$text))
-    corpus <- tm_map(corpus, content_transformer(tolower)) %>%
-      tm_map(removePunctuation) %>%
-      tm_map(removeNumbers) %>%
-      tm_map(removeWords, stopwords("en")) %>%
-      tm_map(stripWhitespace)
-    
-    # Aspects to analyze sentiment for
-    aspects <- c("service", "ambiance", "food", "drinks", "time", "bar", "vibe", "music", "crowd")
-    
-    # Function to perform aspect-based sentiment analysis
-    perform_aspect_sentiment_analysis <- function(reviews_data, aspect) {
-      aspect_reviews <- reviews_data %>%
-        filter(grepl(aspect, text, ignore.case = TRUE))
-      
-      aspect_reviews_tokens <- aspect_reviews %>%
-        unnest_tokens(output = word, input = text) %>%
-        inner_join(get_sentiments("afinn"), by = "word") %>%
-        mutate(aspect = aspect) %>%
-        group_by(business_id, aspect) %>%
-        summarize(sentiment_score = mean(value, na.rm = TRUE))
-      
-      return(aspect_reviews_tokens)
-    }
-    
-    # Initialize an empty list to store aspect-based sentiment analysis results
-    aspect_sentiments <- list()
-    
-    # Iterate through aspects for sentiment analysis
-    for (aspect in aspects) {
-      aspect_sentiments[[aspect]] <- perform_aspect_sentiment_analysis(selected_business_reviews, aspect)
-    }
-    
-    # Combine aspect-based sentiment analysis results into a single dataframe
-    aspect_sentiments_combined <- bind_rows(aspect_sentiments)
-    
-    # Aggregate sentiment scores by business_id and aspect
-    aggregated_sentiments <- aspect_sentiments_combined %>%
-      group_by(business_id, aspect) %>%
-      summarize(avg_sentiment_score = mean(sentiment_score, na.rm = TRUE))
-    
-    # Pivot the data to have aspects as columns
-    pivot_result <- aggregated_sentiments %>%
-      pivot_wider(names_from = aspect, values_from = avg_sentiment_score, values_fill = NA)
-    
-    return(pivot_result)
+  
+  business_details <- reactive({
+    selected_business_info <- sentiment_scores_business_id[sentiment_scores_business_id$business_id == unique_business_ids[business$name == input$business], ]
+    selected_business_info
   })
   
+  # Display selected business info in a table
+  output$selectedBusinessInfo <- renderTable({
+    business_details()
+  })
+  
+  
   # Display the sentiment analysis results in a table
-  output$sentimentScores <- renderTable({
-    sentiment_analysis()
+  #output$sentimentScores <- renderTable({
+   # sentiment_analysis()
+ # })
+  
+  output$sentimentBarPlot <- renderPlot({
+    # Get the sentiment analysis results using the reactive function
+    #sentiment_data <- sentiment_analysis()
+    
+    # Reshape the data for plotting (if needed, depending on your data format)
+    business_scores <- pivot_longer(business_details(), col=colnames(business_details())[-c(1,2)], names_to='variable', values_to='value')
+    
+    # Filter sentiment scores by the selected postal code
+    selected_postal_code <- input$postalCode
+    postal_code_score_avgs <- subset(sentiment_scores_by_postal_code, postal_code == selected_postal_code)
+    postal_code_score_avgs <- pivot_longer(postal_code_score_avgs, col=colnames(postal_code_score_avgs)[-1], names_to='variable', values_to='value')
+
+    
+    # Plotting the sentiment analysis data as a bar plot
+    #TODO: add avg black bars here. another layer of geom_bar()
+    ggplot(NULL, aes(variable, value)) +
+      geom_bar(aes(fill="tomato3"), data=business_scores, stat = 'identity', show.legend = F) +
+      geom_bar(aes(fill='steelblue3'), data=postal_code_score_avgs, stat = 'identity', show.legend = F) +
+      #geom_bar(data = business_scores, aes(x = business_id, y = value, fill = variable), stat = "identity", position = "dodge") +
+      #geom_bar(data = postal_code_scores, aes(x = postal_code, y = value), fill = "black", alpha = 0.5, stat ="identity", position = "dodge") +
+      labs(title = "Sentiment Analysis by Aspect Across Businesses",
+           y = "Sentiment Score") +
+      theme_classic()
+      #theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      #scale_fill_brewer(palette = "Set3") +  # Change the color palette if needed
+      
   })
 
 }
