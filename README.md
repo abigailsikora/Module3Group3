@@ -11,6 +11,9 @@ Module3Group3/
 ├── data/ 
 │   ├── Trips_by_davidsoncounty.csv #data set from US Department of Transportation
 |   ├── census_postalcodes.csv #data set from US Census Bureau
+|   ├── filtered_reviews.json #Yelp reviews
+|   ├── sentiment_by_postal_code.csv
+|   ├── sentiment_scores_by_business.csv
 │   └── nashville_bars_nightlife.json #business data from Yelp
 |
 ├── presentation documents/ 
