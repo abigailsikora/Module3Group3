@@ -29,9 +29,9 @@ Module3Group3/
 └── README.md  # This file
 ```
 ## Explanation of Files and Folders
--`code/`: Contains the main code files for the project.
-`shinyApp.R` is the code used to create the shiny app for this project
-`Sikora.Rmd` is code that was used for the data merging, exploratory analysis, and analysis parts. This code was written by Abigail. See comments on the code for more detailed information.
+-`code/`: Contains the main code files for the project.  
+`shinyApp.R` is the code used to create the shiny app for this project  
+`Sikora.Rmd` is code that was used for the data merging, exploratory analysis, and analysis parts. This code was written by Abigail. See comments on the code for more detailed information.  
 
 
 -`data/`: Stores the datasets used in this project.  
