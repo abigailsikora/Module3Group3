@@ -43,6 +43,7 @@ Module3Group3/
 -`presentation documents/`: Stores the document files used to explain this project.  
 -`Group3 Presentation1.pdf` is the slides of the first presentation which is from the exploratory data analysis.   
 -`Group3 Presentation2.pptx` is the slides for the second presentation which focuses on business advice.  
+-`Group3Summary.pdf` is the 4-page executive-summary of our project.
 
 
 -`image/`: Contains images and plots that might be used in the analysis, presentation, or within the Shiny app. Each subfolder or image corresponds to different aspects or sections of the analysis.
