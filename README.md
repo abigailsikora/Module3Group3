@@ -34,15 +34,15 @@ Module3Group3/
 `Sikora.Rmd` is code that was used for the data merging, exploratory analysis, and analysis parts. This code was written by Abigail. See comments on the code for more detailed information.
 
 
--`data/`: Stores the datasets used in this project.
--`Trips_by_davidsoncounty.csv` is the dataset we filtered from the US Department of Transportation. This only contains trips in Davidson county.
--`census_postalcodes.csv` is the dataset we filtered from the US Census Bureau. It contains the postal codes located in Nashville.
--`nashville_bars_nightlife.json` is the business data set from Yelp.
+-`data/`: Stores the datasets used in this project.  
+-`Trips_by_davidsoncounty.csv` is the dataset we filtered from the US Department of Transportation. This only contains trips in Davidson county.  
+-`census_postalcodes.csv` is the dataset we filtered from the US Census Bureau. It contains the postal codes located in Nashville.  
+-`nashville_bars_nightlife.json` is the business data set from Yelp.  
 
 
--`presentation documents/`: Stores the document files used to explain this project.
--`Group3 Presentation1.pdf` is the slides of the first presentation which is from the exploratory data analysis. 
--`Group3 Presentation2.pptx` is the slides for the second presentation which focuses on business advice.
+-`presentation documents/`: Stores the document files used to explain this project.  
+-`Group3 Presentation1.pdf` is the slides of the first presentation which is from the exploratory data analysis.   
+-`Group3 Presentation2.pptx` is the slides for the second presentation which focuses on business advice.  
 
 
 -`image/`: Contains images and plots that might be used in the analysis, presentation, or within the Shiny app. Each subfolder or image corresponds to different aspects or sections of the analysis.
