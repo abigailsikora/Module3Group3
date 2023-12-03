@@ -12,6 +12,8 @@ Module3Group3/
 ├── data/ 
 │   ├── Trips_by_davidsoncounty.csv #data set from US Department of Transportation
 |   ├── census_postalcodes.csv #data set from US Census Bureau
+|   ├── sentiment_by_postal_code.csv
+|   ├── sentiment_scores_by_business.csv
 │   └── nashville_bars_nightlife.json #business data from Yelp
 |
 ├── presentation documents/ 
@@ -38,6 +40,8 @@ Module3Group3/
 -`Trips_by_davidsoncounty.csv` is the dataset we filtered from the US Department of Transportation. This only contains trips in Davidson county.  
 -`census_postalcodes.csv` is the dataset we filtered from the US Census Bureau. It contains the postal codes located in Nashville.  
 -`nashville_bars_nightlife.json` is the business data set from Yelp.  
+-`sentiment_by_postal_code.csv` is a data set used for our shiny app.  
+-`sentiment_scores_by_business.csv` is a data set used for our shiny app.
 
 
 -`presentation documents/`: Stores the document files used to explain this project.  
