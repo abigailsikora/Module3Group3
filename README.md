@@ -21,12 +21,12 @@ Module3Group3/
 │   └── 
 │
 ├── image/  # Various images and plots used in the analysis and presentation
-│   ├── 
-│   ├── 
-│   ├──
-│   ├── 
-│   ├── 
-│   └──
+│   ├── bartender.png
+│   ├── bouncer.png
+│   ├── cocktails.png
+│   ├── happyhour.png
+│   ├── numberofreviewsbystars.png
+│   └── postalcode_stars.png
 │
 └── README.md  # This file
 ```
@@ -44,13 +44,19 @@ Module3Group3/
 -`sentiment_scores_by_business.csv` is a data set used for our shiny app.
 
 
--`presentation documents/`: Stores the document files used to explain this project.  
+-`presentation documents/`: Stores the document files used to explain this project.   
 -`Group3 Presentation1.pdf` is the slides of the first presentation which is from the exploratory data analysis.   
 -`Group3 Presentation2.pptx` is the slides for the second presentation which focuses on business advice.  
 -`Group3Summary.pdf` is the 4-page executive-summary of our project.
 
 
 -`image/`: Contains images and plots that might be used in the analysis, presentation, or within the Shiny app. Each subfolder or image corresponds to different aspects or sections of the analysis.
+-`bartender.png` image from EDA
+-`bouncer.png` image from EDA
+-`cocktails.png` image from EDA
+-`happyhour.png` image from executive summary
+- `numberofreviewsbystars.png` image from EDA
+- `postalcode_stars.png` image from executive summary
 
 -`README.md:` Provides an overview and explains the repository structure (this file).
 
