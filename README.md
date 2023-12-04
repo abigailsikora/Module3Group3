@@ -50,13 +50,13 @@ Module3Group3/
 -`Group3Summary.pdf` is the 4-page executive-summary of our project.
 
 
--`image/`: Contains images and plots that might be used in the analysis, presentation, or within the Shiny app. Each subfolder or image corresponds to different aspects or sections of the analysis.
--`bartender.png` image from EDA
--`bouncer.png` image from EDA
--`cocktails.png` image from EDA
+-`image/`: Contains images and plots that might be used in the analysis, presentation, or within the Shiny app. Each subfolder or image corresponds to different aspects or sections of the analysis.  
+-`bartender.png` image from EDA  
+-`bouncer.png` image from EDA  
+-`cocktails.png` image from EDA  
 -`happyhour.png` image from executive summary
-- `numberofreviewsbystars.png` image from EDA
-- `postalcode_stars.png` image from executive summary
+-`numberofreviewsbystars.png` image from EDA
+-`postalcode_stars.png` image from executive summary
 
 -`README.md:` Provides an overview and explains the repository structure (this file).
 
