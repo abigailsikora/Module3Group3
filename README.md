@@ -8,6 +8,7 @@ Module3Group3/
 │   ├── Sikora.Rmd #contains code for filtering data sets, creating visuals, and analysis
 |   ├── data cleaning.py
 |   ├── sentiment analysis.py
+|   ├── sentiment_analysis.R
 │   └── shinyApp.R #code for the shiny app
 │
 ├── data/ 
@@ -38,6 +39,7 @@ Module3Group3/
 `Sikora.Rmd` is code that was used for the data merging, exploratory analysis, and analysis parts. This code was written by Abigail. See comments on the code for more detailed information.  (Added by Abigail)  
 `data cleaning.py` contains code used for data cleaning and merging.  (Added by Shuangyu)  
 `sentiment analysis.py` contians code used for sentiment analysis. (Added by Shuangyu)  
+`sentiment_analysis.R` contains code for the other part of sentiment analysis. (Added by Vaishnavi)
 
 
 -`data/`: Stores the datasets used in this project.  
@@ -72,7 +74,7 @@ You can access the Shiny App developed based on our analysis directly via the fo
 **Note**: Ensure you have all the necessary R packages installed and loaded to run the code files and Shiny app locally.
 
 ## Contributors
--Vaisnavi Borwankar  
+-Vaishnavi Borwankar  
 
 -Abigail Sikora  
 
