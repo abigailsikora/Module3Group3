@@ -103,20 +103,20 @@ ui <- fluidPage(
             </div>"),
                       HTML("<div class='advice-container'>
               <p>3. Cocktails are the best drink to serve.It has the highest sentiment score. </p>
-            </div>")
-               ),
+            </div>"),
                HTML("<div class='advice-container'>
               <p>4. We recommend you improve wait times as customers are sensitive to wait. 22.6% of reviews mentioned wait.</p>
-            </div>")
-             ),
-               column(6, 
-                      plotOutput("happyhour"),
-                      plotOutput("postalcodeplot"),
-                      tableOutput("drinks")
-               )
-             )
-    )
-)
+            </div>"))
+             ,
+             column(6, 
+                    plotOutput("happyhour"),
+                    fluidRow(
+                      column(6, tableOutput("drinks")),
+                      column(6, plotOutput("postalcodeplot"))
+                      )
+                    )
+    ))
+))
 
 
 
@@ -236,15 +236,15 @@ server <- function(input, output, session) {
     # Plotting the sentiment analysis data as a bar plot
     #TODO: add avg black bars here. another layer of geom_bar()
     ggplot(NULL, aes(variable, value)) +
-      geom_bar(aes(fill="tomato3"), data=business_scores, stat = 'identity', show.legend = F) +
-      geom_bar(aes(fill='steelblue3'), data=postal_code_score_avgs, stat = 'identity', show.legend = F) +
-      #geom_bar(data = business_scores, aes(x = business_id, y = value, fill = variable), stat = "identity", position = "dodge") +
-      #geom_bar(data = postal_code_scores, aes(x = postal_code, y = value), fill = "black", alpha = 0.5, stat ="identity", position = "dodge") +
-      labs(title = "Sentiment Analysis by Aspect Across Businesses",
+      geom_bar(aes(fill="tomato3"), data=business_scores, stat = 'identity') +
+      geom_bar(aes(fill='steelblue3'), data=postal_code_score_avgs, stat = 'identity') +
+      labs(title = "Sentiment Analysis by Aspect Across Business and Postal Code",
            y = "Sentiment Score") +
-      theme_classic()
-    #theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    #scale_fill_brewer(palette = "Set3") +  # Change the color palette if needed
+      theme_classic()+
+      theme(legend.position = "top") +
+      scale_fill_manual(values = c("tomato3", "steelblue3"), 
+                        name = "Legend",
+                        labels = c("Selected Business Scores", "Selected Postal Code Scores"))
     
   })
 }
