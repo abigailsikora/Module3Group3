@@ -54,9 +54,9 @@ Module3Group3/
 -`bartender.png` image from EDA  
 -`bouncer.png` image from EDA  
 -`cocktails.png` image from EDA  
--`happyhour.png` image from executive summary
--`numberofreviewsbystars.png` image from EDA
--`postalcode_stars.png` image from executive summary
+-`happyhour.png` image from executive summary  
+-`numberofreviewsbystars.png` image from EDA  
+-`postalcode_stars.png` image from executive summary  
 
 -`README.md:` Provides an overview and explains the repository structure (this file).
 
